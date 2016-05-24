@@ -1,0 +1,33 @@
+<html>
+<head>
+	<title>Presentation</title>
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.2.1/foundation.min.css"/>
+	<link rel="stylesheet" type="text/css" href="style.css"/>
+	<!-- Main libraries -->
+	<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.2.1/foundation.min.js" type="text/javascript"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.5/marked.min.js" type="text/javascript"></script>
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/styles/default.min.css">
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js"></script>
+	<!-- Core written  -->
+	<script src="utils.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="slide-container">
+	<div id="slide-contents"></div>
+	<div id="slide-controls">
+		<div class="page-controls">
+			<ul class="pagination text-center" role="navigation" aria-label="Pagination">
+			  <li class="pagination-previous" arial-label="Previous page">Previous</li>
+			  <li class="ellipsis ellipsis-default" style="display: none"></li>
+			  <li class="page-num current">1</li>
+			  <li class="ellipsis ellipsis-default" style="display: none"></li>
+			  <li class="pagination-next"><a aria-label="Next page">Next</a></li>
+			</ul>
+		</div>
+		<button type="button" class="success button js-controls">Run JavaScript</button>
+	</div>
+</div>
+<script src="script.js" type="text/javascript"></script>
+</body>
+</html>

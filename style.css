@@ -1,0 +1,38 @@
+#slide-container {
+	margin: 1rem;
+}
+
+#slide-contents {
+	margin: 5%;
+	margin-bottom: 0.5em;
+	padding: 1em;
+	height: 80%;
+	border: 1px solid black;
+	border-radius: 4px 4px 4px 4px;
+	-moz-border-radius: 4px 4px 4px 4px;
+	-webkit-border-radius: 4px 4px 4px 4px;
+}
+
+.js-controls {
+	position: relative;
+	left: 5%;
+}
+
+.page-controls {
+	display: inline-block;
+	width: 90%;
+}
+
+h1, h2, h3 {
+	text-align: center;
+}
+
+.eop {
+	margin-top: 20%;
+	font-style: italic;
+	color: white;
+}
+
+.page-num {
+	display: none;
+}
