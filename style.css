@@ -19,7 +19,8 @@
 }
 
 .page-controls {
-	display: inline-block;
+	/*display: inline-block;*/
+	display: none;
 	width: 90%;
 }
 
@@ -30,7 +31,7 @@ h1, h2, h3 {
 .eop {
 	margin-top: 20%;
 	font-style: italic;
-	color: white;
+	/*color: white;*/
 }
 
 .page-num {

@@ -14,6 +14,8 @@ var mainElement = document.getElementById('slide-container'),
 	buster = Math.floor(Math.random() * 12345),
 	slides = ['<h3 class="eop">End of Presentation</h3>'];
 
+var tmp_current_slide = 1;
+
 $.get('info.json?cb=' + buster, function(data) {
     config = JSON.parse(data);
  })
@@ -70,7 +72,7 @@ $.get('info.json?cb=' + buster, function(data) {
 				retrieveSlides();
 			},
 		 	error: function () {
-		 		// console.clear();
+		 		console.clear();
 		 		createPagination(--currentSlide);
 		 	}
 		 });
@@ -145,12 +147,14 @@ $.get('info.json?cb=' + buster, function(data) {
 
 			if( key == codes.RIGHT ) {
 				// advance if there's a current
-				document.querySelector('#slide-controls li.current') && advance('forward'); 
+				// document.querySelector('#slide-controls li.current') && advance('forward'); 
+				advance('forward');
 			}
 			else if( key == codes.LEFT ) {
 				// reverse if we can
-				!mainElement.querySelector('#slide-controls li.pagination-previous').classList.contains('disabled')
-				&& advance('reverse'); 
+				// !mainElement.querySelector('#slide-controls li.pagination-previous').classList.contains('disabled')
+				// && advance('reverse'); 
+				advance('reverse');
 			}
 			else if( key == codes.ENTER ) {
 				var btn = document.querySelector('#slide-controls button.js-controls');
@@ -172,87 +176,89 @@ $.get('info.json?cb=' + buster, function(data) {
 		 * @void
 		 */
 		function advance(dir, e) {
-			var current = mainElement.querySelector('#slide-controls li.current'),
-				next = (dir === 'forward' ? current.nextElementSibling : current.previousElementSibling),
-				curr_num = parseInt(current.innerHTML, 10),
+			// var current = mainElement.querySelector('#slide-controls li.current'),
+			// 	next = (dir === 'forward' ? current.nextElementSibling : current.previousElementSibling),
+			// 	curr_num = parseInt(current.innerHTML, 10),
+			var curr_num = tmp_current_slide,
 				next_num = (dir === 'forward' ? curr_num + 1 : curr_num - 1);
 
-			// did we accidentally get to the ellipsis
-			if(next.classList.contains('ellipsis')) {
-				next = (dir === 'forward' ? next.nextElementSibling : next.previousElementSibling);
-			}
+			// // did we accidentally get to the ellipsis
+			// if(next.classList.contains('ellipsis')) {
+			// 	next = (dir === 'forward' ? next.nextElementSibling : next.previousElementSibling);
+			// }
 			
-			// is it a hidden element
-			if(next.style.display === 'none') {
-				// first get all the page number elements
-				var all_nums = mainElement.querySelectorAll('li.page-num');
+			// // is it a hidden element
+			// if(next.style.display === 'none') {
+			// 	// first get all the page number elements
+			// 	var all_nums = mainElement.querySelectorAll('li.page-num');
 
-				if(dir === 'forward') {
-					// hide the first-most one
-					for (var i = 0; i < all_nums.length; i++) {
-						if(all_nums[i].isHiddenElement()) { continue; }
-						else {
-							// if first time, add ellipsis
-							if(all_nums[i] === firstPageElement) {
-								mainElement.querySelector('li.ellipsis-default').showElement();
-							}
+			// 	if(dir === 'forward') {
+			// 		// hide the first-most one
+			// 		for (var i = 0; i < all_nums.length; i++) {
+			// 			if(all_nums[i].isHiddenElement()) { continue; }
+			// 			else {
+			// 				// if first time, add ellipsis
+			// 				if(all_nums[i] === firstPageElement) {
+			// 					mainElement.querySelector('li.ellipsis-default').showElement();
+			// 				}
 
-							all_nums[i].hideElement();
-							break;
-						}
-					}
-				}
-				else {
-					for (var len = i = all_nums.length -1; i >= 0; i--) {
-						if(all_nums[i].isHiddenElement()) { continue; }
-						else {
-							// if first time, add ellipsis
-							if(i === len) {
-								mainElement.querySelectorAll('li.ellipsis-default')[1].showElement();
-							}
+			// 				all_nums[i].hideElement();
+			// 				break;
+			// 			}
+			// 		}
+			// 	}
+			// 	else {
+			// 		for (var len = i = all_nums.length -1; i >= 0; i--) {
+			// 			if(all_nums[i].isHiddenElement()) { continue; }
+			// 			else {
+			// 				// if first time, add ellipsis
+			// 				if(i === len) {
+			// 					mainElement.querySelectorAll('li.ellipsis-default')[1].showElement();
+			// 				}
 
-							all_nums[i].hideElement();
-							break;
-						}
-					}
-				}
+			// 				all_nums[i].hideElement();
+			// 				break;
+			// 			}
+			// 		}
+			// 	}
 				
 
-				// show it
-				next.showElement();
+			// 	// show it
+			// 	next.showElement();
 
-				// evaluate if we need to hide the ellipsis
-				if(next.nextElementSibling === ellipsisElement) {
-					ellipsisElement.hideElement();
-				}
-			}
+			// 	// evaluate if we need to hide the ellipsis
+			// 	if(next.nextElementSibling === ellipsisElement) {
+			// 		ellipsisElement.hideElement();
+			// 	}
+			// }
 
-			// de-highlight the current number
-			current.classList.remove('current');
-			current.innerHTML = '';
-			current.appendChild(createAnchor(curr_num));
+			// // de-highlight the current number
+			// current.classList.remove('current');
+			// current.innerHTML = '';
+			// current.appendChild(createAnchor(curr_num));
 
 
-			// if we're two from the end, don't continue
-			var cnt = 0;
-			tmp = getNextSiblings(next, function() {
-				return cnt++ < 2;
-			});
-			if(tmp[1].classList.contains('ellipsis-default')) {
-				tmp[0].showElement();
-				tmp[1].hideElement();
-			}
+			// // if we're two from the end, don't continue
+			// var cnt = 0;
+			// tmp = getNextSiblings(next, function() {
+			// 	return cnt++ < 2;
+			// });
+			// if(tmp[1].classList.contains('ellipsis-default')) {
+			// 	tmp[0].showElement();
+			// 	tmp[1].hideElement();
+			// }
 
 			// If at the end, say so, otherwise wrap around
-			if(dir === 'forward' && next === nextElement) {
+			if(dir === 'forward' && next_num === slides.length-1) {//&& next === nextElement) {
 				endPresentation();
 			}
 			else {
-				next.innerHTML = next.querySelector('a').textContent;
-				next.classList.add('current');
-				next.setAttribute('aria-label', 'Page ' + next_num);
+				// next.innerHTML = next.querySelector('a').textContent;
+				// next.classList.add('current');
+				// next.setAttribute('aria-label', 'Page ' + next_num);
 
 				initSlide(next_num);
+				tmp_current_slide = next_num;
 			}
 		};
 
@@ -262,7 +268,7 @@ $.get('info.json?cb=' + buster, function(data) {
 		 */
 		function endPresentation() {
 			initSlide(0);
-			slidePane.style.background = 'black';
+			// slidePane.style.background = 'black';
 			paginationElement.hideElement();
 			prevElement.classList.add('disabled');
 		}
@@ -276,6 +282,8 @@ $.get('info.json?cb=' + buster, function(data) {
 			firstPageElement.innerHTML = '' + 1;
 			firstPageElement.classList.add('current');
 			firstPageElement.setAttribute('aria-label', 'Page 1');
+
+			tmp_current_slide = 1;
 
 			initSlide(1);
 		}
