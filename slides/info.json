@@ -1,4 +1,6 @@
 {
 	"title": "JavaScript Tidbits",
-	"slideCount": 5
+	"logDividers": true,
+	"runBefore": "window.IAWD = {}; IAWD.gnpr = {}; IAWD.mfpr = {}; IAWD.aipr = {};",
+	"slidejs": true
 }

@@ -16,14 +16,23 @@ var mainElement = document.getElementById('slide-container'),
 
 var tmp_current_slide = 1;
 
-$.get('info.json?cb=' + buster, function(data) {
+$.get('slides/info.json?cb=' + buster, function(data) {
     config = JSON.parse(data);
  })
 .always(function setupPage() {
 
 	if(config) {
 		if(config.title) {	document.querySelector('title').innerHTML = config.title; }
-		
+		if(config.runBefore) {
+			// woohoo bad practices
+			eval(config.runBefore);
+		}
+		if(config.slidejs) {
+			var script = document.createElement('script');
+			  	script.type = 'text/javascript'; 
+				script.src = 'slides/slides.js';
+				document.getElementsByTagName('head')[0].appendChild(script);
+		}
 	}
 
 	$.ajax({
@@ -83,6 +92,7 @@ $.get('info.json?cb=' + buster, function(data) {
 	 * @param {integer} slide_count_plus_one
 	 */
 	function createPagination(slide_count) {
+
 		var add_ellipsis = slide_count > 6,
 			paginationElement = mainElement.querySelector('#slide-controls .pagination'),
 			nextElement = mainElement.querySelector('#slide-controls li.pagination-next'),
@@ -142,7 +152,8 @@ $.get('info.json?cb=' + buster, function(data) {
 					'ENTER': 13,
 					'SPACE': 32,
 					'LEFT': 37,
-					'RIGHT': 39
+					'RIGHT': 39,
+					'BACKTICK': 192
 				};
 
 			if( key == codes.RIGHT ) {
@@ -167,6 +178,9 @@ $.get('info.json?cb=' + buster, function(data) {
 				if(document.querySelectorAll('.eop').length === 0) { return; }
 				restartPresentation();
 			}
+			else if( key == codes.BACKTICK ) {
+				console.clear();
+			}
 		});
 
 		/** 
@@ -181,6 +195,8 @@ $.get('info.json?cb=' + buster, function(data) {
 			// 	curr_num = parseInt(current.innerHTML, 10),
 			var curr_num = tmp_current_slide,
 				next_num = (dir === 'forward' ? curr_num + 1 : curr_num - 1);
+
+			if(next_num < 0) next_num = slides.length -1;
 
 			// // did we accidentally get to the ellipsis
 			// if(next.classList.contains('ellipsis')) {
@@ -249,8 +265,9 @@ $.get('info.json?cb=' + buster, function(data) {
 			// }
 
 			// If at the end, say so, otherwise wrap around
-			if(dir === 'forward' && next_num === slides.length-1) {//&& next === nextElement) {
+			if(dir === 'forward' && next_num === slides.length) {//&& next === nextElement) {
 				endPresentation();
+				tmp_current_slide = 0;
 			}
 			else {
 				// next.innerHTML = next.querySelector('a').textContent;
@@ -359,7 +376,7 @@ function initSlide(page_num) {
 	// grab and highlight all blocks
 	var code_blocks = document.querySelectorAll('pre > code');
 
-	for (var i = code_blocks.length - 1; i >= 0; i--) {
+	for (var i = 0, len = code_blocks.length; i < len; i++) {
 		if(code_blocks[i].className.indexOf('javascript')) {
 			javascript_text += code_blocks[i].textContent;
 		}
@@ -375,6 +392,9 @@ function initSlide(page_num) {
 
 		// invoke the function in it's own scope
 		javascript_text = "(function sample() {\n" +
+						  (config.logDividers ? 
+						  	"console.log(' ----- Slide {0} -----');\n".format(page_num) :
+						  	'') +
 							javascript_text +
 						  "})();"
 
